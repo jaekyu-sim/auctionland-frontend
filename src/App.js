@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Switch } from "react-router-dom";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import MainPage  from "./pages/MainPage/MainPage";
+
+
+
 
 const App = () => {
     return(
