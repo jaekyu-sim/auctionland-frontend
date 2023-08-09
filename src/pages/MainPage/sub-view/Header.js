@@ -6,58 +6,35 @@ const Header = () => {
 
     const { Option } = Select;
     
-    //Logic 구현 부분
     const [sido, setSido] = useState("");
     const [sidoList, setSidoList] = useState([]);
     const [siguList, setSiguList] = useState([]);
     const [sidongList, setSidongList] = useState([]);
 
-    const handleSidoChange = (value) => {
-        //선택한 si 가 가진 gu 정보 받아오는 부분 구현
+    const handleSidoChange = async (value) => {
         setSido(value);
-        
+
         const depth = 2;
-        const parentData = sido;
+        const parentData = value;
         const params = {parentData : parentData, depth : depth}
 
-        const returnSiguNameList = Apis.getAPI("/api/auctionland/geetLocationName", {params: params});
-
-        return returnSiguNameList;
+        const returnSiguNameList = await Apis.getAPI("/api/auctionland/getLocationName", {params: params});
+        //console.log(returnSiguNameList);
+        setSiguList(returnSiguNameList.data);
     }
-    const handleSidoCdCall = () => {
-        //si Select box 클릭하면 backend 의 H2 DB 의 Sido 정보를 불러오는부분 구현
-        //value 사용 안함.
+
+    const handleSidoCdCall = async () => {
         const depth = 1;
         const parentData = "";
         const params = {parentData : parentData, depth : depth}
         
-        const returnSidoNameList = Apis.getAPI("/api/auctionland/getLocationName", {params: params});
-
-        return returnSidoNameList;
+        const returnSidoNameList = await Apis.getAPI("/api/auctionland/getLocationName", {params: params});
+        setSidoList(returnSidoNameList.data);
     }
 
-
-
-    useEffect(async () => {
-        //console.log("Header 렌더링 완료.");
-        
-        const tmpSidoList = await handleSidoCdCall()
-        setSidoList(tmpSidoList.data);
-        console.log(tmpSidoList)
-
-        //crossOriginIsolated.log(tmpSidoList)
-        //console.log("LocationSido Code 불러오기 완료.")
-      },[]);
-
-    //   useEffect(() => {
-    //     console.log("sidoList : ");
-    //     console.log(sidoList);
-    //   }, [sidoList])
-
-      useEffect(() => {
-        console.log("sido : " + sido)
-      }, [sido])
-
+    useEffect(() => {
+        handleSidoCdCall();
+    }, []);
 
     return (
         <div style={{backgroundColor:"aqua"}}>
@@ -65,19 +42,26 @@ const Header = () => {
             <Select defaultValue="선택"
                 style={{width : '120px'}}
                 onChange={handleSidoChange}>
-
                 {sidoList.map((option) => (
                     <Option key={option} value={option}>
                       {option}
                     </Option>
                   ))}
-                  </Select>
-            <input></input>
-            <label>시/군/구 : </label>
-            <input></input>
-            <label>동 : </label>
-            <input></input>
+            </Select>
+
+            <label>시/구 : </label>
+            <Select defaultValue="선택"
+                style={{width : '120px'}}
+                >
+                {siguList.map((option) => (
+                    <Option key={option} value={option}>
+                      {option}
+                    </Option>
+                  ))}
+            </Select>
+            {/* 나머지 입력 요소들 */}
         </div>
     )
 }
+
 export default Header;
