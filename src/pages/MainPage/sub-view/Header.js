@@ -15,6 +15,14 @@ const Header = () => {
     const handleSidoChange = (value) => {
         //선택한 si 가 가진 gu 정보 받아오는 부분 구현
         setSido(value);
+        
+        const depth = 2;
+        const parentData = sido;
+        const params = {parentData : parentData, depth : depth}
+
+        const returnSiguNameList = Apis.getAPI("/api/auctionland/geetLocationName", {params: params});
+
+        return returnSiguNameList;
     }
     const handleSidoCdCall = () => {
         //si Select box 클릭하면 backend 의 H2 DB 의 Sido 정보를 불러오는부분 구현
@@ -37,16 +45,18 @@ const Header = () => {
         setSidoList(tmpSidoList.data);
         console.log(tmpSidoList)
 
-        
-
         //crossOriginIsolated.log(tmpSidoList)
         //console.log("LocationSido Code 불러오기 완료.")
       },[]);
 
+    //   useEffect(() => {
+    //     console.log("sidoList : ");
+    //     console.log(sidoList);
+    //   }, [sidoList])
+
       useEffect(() => {
-        console.log("sidoList : ");
-        console.log(sidoList);
-      }, [sidoList])
+        console.log("sido : " + sido)
+      }, [sido])
 
 
     return (
