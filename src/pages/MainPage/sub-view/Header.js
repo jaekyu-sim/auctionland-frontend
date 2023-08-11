@@ -7,28 +7,50 @@ const Header = () => {
     const { Option } = Select;
     
     const [sido, setSido] = useState("");
+    const [sigu, setSigu] = useState("");
+    const [sidong, setSidong] = useState("");
+    const [siri, setSiri] = useState(""); 
     const [sidoList, setSidoList] = useState([]);
     const [siguList, setSiguList] = useState([]);
     const [sidongList, setSidongList] = useState([]);
+    const [siriList, setSiriList] = useState([]);
 
     const handleSidoChange = async (value) => {
         setSido(value);
 
-        const depth = 2;
         const parentData = value;
-        const params = {parentData : parentData, depth : depth}
+        const params = {sidoData : parentData}
 
-        const returnSiguNameList = await Apis.getAPI("/api/auctionland/getLocationName", {params: params});
+        const returnSiguNameList = await Apis.getAPI("/api/auctionland/getSiguLocationNameList", {params: params});
         //console.log(returnSiguNameList);
         setSiguList(returnSiguNameList.data);
     }
 
+    const handleSiguChange = async (value) => {
+        setSigu(value);
+
+        const parentData = value;
+        const params = {sidoData : sido, siguData : parentData}
+
+        const returnSidongNameList = await Apis.getAPI("/api/auctionland/getSidongLocationNameList", {params: params});
+        //console.log(returnSiguNameList);
+        setSidongList(returnSidongNameList.data);
+    }
+
+    const handleSidongChange = async (value) => {
+        setSidong(value);
+
+        const parentData = value;
+        const params = {sidoData : sido, siguData : sigu, sidongData : parentData}
+
+        const returnSidongNameList = await Apis.getAPI("/api/auctionland/getSiriLocationNameList", {params: params});
+        //console.log(returnSiguNameList);
+        setSidongList(returnSidongNameList.data);
+    }
+
     const handleSidoCdCall = async () => {
-        const depth = 1;
-        const parentData = "";
-        const params = {parentData : parentData, depth : depth}
         
-        const returnSidoNameList = await Apis.getAPI("/api/auctionland/getLocationName", {params: params});
+        const returnSidoNameList = await Apis.getAPI("/api/auctionland/getSidoLocationNameList");
         setSidoList(returnSidoNameList.data);
     }
 
@@ -52,8 +74,30 @@ const Header = () => {
             <label>시/구 : </label>
             <Select defaultValue="선택"
                 style={{width : '120px'}}
-                >
+                onChange={handleSiguChange}>
                 {siguList.map((option) => (
+                    <Option key={option} value={option}>
+                      {option}
+                    </Option>
+                  ))}
+            </Select>
+
+            <label>동/면 : </label>
+            <Select defaultValue="선택"
+                style={{width : '120px'}}
+                onChange={handleSidongChange}>
+                {sidongList.map((option) => (
+                    <Option key={option} value={option}>
+                      {option}
+                    </Option>
+                  ))}
+            </Select>
+
+            <label>리 : </label>
+            <Select defaultValue="선택"
+                style={{width : '120px'}}
+                >
+                {sidongList.map((option) => (
                     <Option key={option} value={option}>
                       {option}
                     </Option>
