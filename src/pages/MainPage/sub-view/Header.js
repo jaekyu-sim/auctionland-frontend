@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Select, Space } from "antd";
+import { Select, Space, Button } from "antd";
 import * as Apis from "../../../utils/Api";
 
 const Header = () => {
@@ -17,6 +17,13 @@ const Header = () => {
 
     const handleSidoChange = async (value) => {
         setSido(value);
+        //ghsetSiguList([]);
+        //만약 상위->하위 행정단위 순서로 조작 하다가 값자가 상위 행정단위 조작하는 경우 발생시 기존 하위 행정단위 초기화
+        setSigu("");
+        setSidong("");
+        setSiri("");
+        setSidongList([]);
+        setSiriList([]);
 
         const parentData = value;
         const params = {sidoData : parentData}
@@ -24,10 +31,15 @@ const Header = () => {
         const returnSiguNameList = await Apis.getAPI("/api/auctionland/getSiguLocationNameList", {params: params});
         //console.log(returnSiguNameList);
         setSiguList(returnSiguNameList.data);
+        
     }
 
     const handleSiguChange = async (value) => {
         setSigu(value);
+        //setSidongList([]);
+        setSidong("");
+        setSiri("");
+        setSiriList([]);
 
         const parentData = value;
         const params = {sidoData : sido, siguData : parentData}
@@ -40,18 +52,47 @@ const Header = () => {
     const handleSidongChange = async (value) => {
         setSidong(value);
 
+        setSiri("");
         const parentData = value;
         const params = {sidoData : sido, siguData : sigu, sidongData : parentData}
 
-        const returnSidongNameList = await Apis.getAPI("/api/auctionland/getSiriLocationNameList", {params: params});
+        const returnSiriNameList = await Apis.getAPI("/api/auctionland/getSiriLocationNameList", {params: params});
         //console.log(returnSiguNameList);
-        setSidongList(returnSidongNameList.data);
+        setSiriList(returnSiriNameList.data);
+    }
+
+    const handleSiriChange = async (value) => {
+        setSiri(value);
     }
 
     const handleSidoCdCall = async () => {
+        setSidoList([]);
+        setSiguList([]);
+        setSidongList([]);
+        setSiriList([]);
         
         const returnSidoNameList = await Apis.getAPI("/api/auctionland/getSidoLocationNameList");
         setSidoList(returnSidoNameList.data);
+    }
+
+    const handleSearchBtnClick = async () => {
+        // 버튼 클릭 시 해당하는 경매 데이터 불러오는 부분.
+        
+
+        // 1. 우선 Location 정보 파라미터 제작
+        const locationDatas = {daepyoSidoCd: sido, daepyoSiguCd : sigu, daepyoSidongCd : sidong, daepyoSiriCd : siri}
+
+        const returnAuctionDatas = await Apis.getAPI("/api/auctionland/getAuctionData", {params: locationDatas})
+
+        for(let i = 0 ; i < returnAuctionDatas.data.length ; i++)
+        {
+            let auctionData = returnAuctionDatas.data[i];
+            console.log(auctionData)
+        }
+
+        
+
+        console.log(returnAuctionDatas);
     }
 
     useEffect(() => {
@@ -63,7 +104,8 @@ const Header = () => {
             <label>시/도 : </label>
             <Select defaultValue="선택"
                 style={{width : '120px'}}
-                onChange={handleSidoChange}>
+                onChange={handleSidoChange}
+                value={sido}>
                 {sidoList.map((option) => (
                     <Option key={option} value={option}>
                       {option}
@@ -74,7 +116,8 @@ const Header = () => {
             <label>시/구 : </label>
             <Select defaultValue="선택"
                 style={{width : '120px'}}
-                onChange={handleSiguChange}>
+                onChange={handleSiguChange}
+                value={sigu}>
                 {siguList.map((option) => (
                     <Option key={option} value={option}>
                       {option}
@@ -85,7 +128,8 @@ const Header = () => {
             <label>동/면 : </label>
             <Select defaultValue="선택"
                 style={{width : '120px'}}
-                onChange={handleSidongChange}>
+                onChange={handleSidongChange}
+                value={sidong}>
                 {sidongList.map((option) => (
                     <Option key={option} value={option}>
                       {option}
@@ -96,13 +140,19 @@ const Header = () => {
             <label>리 : </label>
             <Select defaultValue="선택"
                 style={{width : '120px'}}
-                >
+                onChange={handleSiriChange}
+                value={siri}>
                 {sidongList.map((option) => (
                     <Option key={option} value={option}>
                       {option}
                     </Option>
                   ))}
             </Select>
+
+            <Button
+                onClick={handleSearchBtnClick}>
+                검색
+            </Button>
             {/* 나머지 입력 요소들 */}
         </div>
     )
