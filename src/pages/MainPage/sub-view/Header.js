@@ -88,6 +88,22 @@ const Header = () => {
         {
             let auctionData = returnAuctionDatas.data[i];
             console.log(auctionData)
+
+            let currentIndex = -1;
+            let targetChar = ">"
+            let targetIdx = 17
+            for (let i = 0; i < targetIdx; i++) {
+                currentIndex = auctionData.indexOf(targetChar, currentIndex + 1);
+                if (currentIndex === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+            console.log("currentIndex : " + currentIndex);
+            console.log(auctionData.substring(currentIndex, currentIndex + 20))
+
+
+
+
         }
 
         
