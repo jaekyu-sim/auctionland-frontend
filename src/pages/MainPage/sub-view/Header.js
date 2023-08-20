@@ -77,6 +77,8 @@ const Header = () => {
 
     const handleSearchBtnClick = async () => {
         // 버튼 클릭 시 해당하는 경매 데이터 불러오는 부분.
+
+        let searchResult = [];
         
 
         // 1. 우선 Location 정보 파라미터 제작
@@ -86,25 +88,178 @@ const Header = () => {
 
         for(let i = 0 ; i < returnAuctionDatas.data.length ; i++)
         {
+            // 2. 경매 데이터 중 필요값 추출
+            // 2-1. 경매 데이터 중 주소값 추출
             let auctionData = returnAuctionDatas.data[i];
-            console.log(auctionData)
+            //console.log(auctionData)
 
-            let currentIndex = -1;
-            let targetChar = ">"
-            let targetIdx = 17
-            for (let i = 0; i < targetIdx; i++) {
-                currentIndex = auctionData.indexOf(targetChar, currentIndex + 1);
-                if (currentIndex === -1) {
+            let currentStartIndex = -1;
+            let targetStartChar = "<a	";
+            let targetStartIdx = 1;
+
+            
+            let currentEndIndex = -1;
+            let currentEndIndex2 = -1;
+            let targetEndChar = ">";
+            let targetEndIdx = 1;
+
+            
+            for (let i = 0; i < targetStartIdx; i++) {
+                currentStartIndex = auctionData.indexOf(targetStartChar, currentStartIndex + 1);
+                if (currentStartIndex === -1) {
                     break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
                 }
             }
-            console.log("currentIndex : " + currentIndex);
-            console.log(auctionData.substring(currentIndex, currentIndex + 20))
+
+            for (let i = 0; i < targetEndIdx; i++) {
+                currentEndIndex = auctionData.indexOf(targetEndChar, currentStartIndex + currentEndIndex + 10); // 넉넉잡아 10만큼 뒤에 인덱스부터 검사 시작
+                if (currentEndIndex === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+
+            for (let i = 0; i < targetEndIdx; i++) {
+                currentEndIndex2 = auctionData.indexOf("</a>", currentEndIndex + 10);
+                if (currentEndIndex2 === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
 
 
+            //console.log("currentIndex : " + currentStartIndex, currentEndIndex, targetStartIdx, targetEndIdx);
+            //console.log(auctionData.substring(currentEndIndex+6, currentEndIndex2))
+            //auctionData.substring(currentEndIndex+6, currentEndIndex2) -> 필요한 주소값
+            const jusoData = auctionData.substring(currentEndIndex+6, currentEndIndex2)
 
+
+            // 2-2. 경매 데이터 중 주소값 제외한 나머지(가격, 시세대비 가격, 유찰횟수) 추출
+            let tmpString = "";
+
+            //<div class="tbl_btm_noline">
+            currentStartIndex = -1;
+            targetStartChar = "<div class=\"tbl_btm_noline\">";
+            targetStartIdx = 1;
+
+            
+            currentEndIndex = -1;
+            currentEndIndex2 = -1;
+            targetEndChar = ">";
+            targetEndIdx = 1;
+
+            
+            for (let i = 0; i < targetStartIdx; i++) {
+                currentStartIndex = auctionData.indexOf(targetStartChar, currentStartIndex + 1);
+                if (currentStartIndex === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+
+            for (let i = 0; i < targetEndIdx; i++) {
+                currentEndIndex = auctionData.indexOf(targetEndChar, currentStartIndex + currentEndIndex + 10); // 넉넉잡아 10만큼 뒤에 인덱스부터 검사 시작
+                if (currentEndIndex === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+
+            for (let i = 0; i < targetEndIdx; i++) {
+                currentEndIndex2 = auctionData.indexOf("</div>", currentEndIndex + 10);
+                if (currentEndIndex2 === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+
+
+            //console.log("currentIndex : " + currentStartIndex, currentEndIndex, targetStartIdx, targetEndIdx);
+            //console.log(auctionData.substring(currentEndIndex+6, currentEndIndex2))
+
+            tmpString = auctionData.substring(currentEndIndex+6, currentEndIndex2);
+            
+            const gamjeongPrice = tmpString.replace(/\s+/g, "");
+
+
+            //<div class="tbl_btm_noline">
+            currentStartIndex = -1;
+            targetStartChar = "<div class=\"tbl_btm_line\">";
+            targetStartIdx = 1;
+
+            
+            currentEndIndex = -1;
+            currentEndIndex2 = -1;
+            targetEndChar = ">";
+            targetEndIdx = 1;
+
+            for (let i = 0; i < targetStartIdx; i++) {
+                currentStartIndex = auctionData.indexOf(targetStartChar, currentStartIndex + 1);
+                if (currentStartIndex === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+
+            for (let i = 0; i < targetEndIdx; i++) {
+                currentEndIndex = auctionData.indexOf(targetEndChar, currentStartIndex + currentEndIndex + 10); // 넉넉잡아 10만큼 뒤에 인덱스부터 검사 시작
+                if (currentEndIndex === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+
+            for (let i = 0; i < targetEndIdx; i++) {
+                currentEndIndex2 = auctionData.indexOf("<br />", currentEndIndex + 10);
+                if (currentEndIndex2 === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+
+
+            //console.log("currentIndex : " + currentStartIndex, currentEndIndex, targetStartIdx, targetEndIdx);
+            //console.log(auctionData.substring(currentEndIndex+8, currentEndIndex2))
+
+            tmpString = auctionData.substring(currentEndIndex+8, currentEndIndex2);
+            const choijeoIpchalPrice =  tmpString.replace(/\s+/g, "");
+
+            //<div class="tbl_btm_noline">
+            currentStartIndex = -1;
+            targetStartChar = "<div class=\"tbl_btm_line\">";
+            targetStartIdx = 2;
+
+            currentEndIndex = -1;
+            currentEndIndex2 = -1;
+            targetEndChar = ">";
+            targetEndIdx = 1;
+            
+            for (let i = 0; i < targetStartIdx; i++) {
+                currentStartIndex = auctionData.indexOf(targetStartChar, currentStartIndex + 1);
+                if (currentStartIndex === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+
+            for (let i = 0; i < targetEndIdx; i++) {
+                currentEndIndex = auctionData.indexOf(targetEndChar, currentStartIndex + currentEndIndex + 10); // 넉넉잡아 10만큼 뒤에 인덱스부터 검사 시작
+                if (currentEndIndex === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+
+            for (let i = 0; i < targetEndIdx; i++) {
+                currentEndIndex2 = auctionData.indexOf("</div>", currentEndIndex + 10);
+                if (currentEndIndex2 === -1) {
+                    break; // 해당 인덱스 미만에서 더 이상 찾을 수 없음
+                }
+            }
+ 
+
+
+            tmpString = auctionData.substring(currentStartIndex + "<div class=\"tbl_btm_line\">".length, currentEndIndex2)
+            const yucahlNum = tmpString.replace(/\s+/g, "");
+
+
+            //console.log("result : ", gamjeongPrice, choijeoIpchalPrice, yucahlNum);
+
+            searchResult.push({jData : jusoData, gPrice : gamjeongPrice, cPrice : choijeoIpchalPrice, yNum : yucahlNum});
 
         }
+
+        console.log(searchResult);
 
         
 
