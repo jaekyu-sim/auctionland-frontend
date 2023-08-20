@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Switch } from "react-router-dom";
 import React, {useState, useEffect} from "react";
 import MainPage  from "./pages/MainPage/MainPage";
-
+import { RecoilRoot } from 'recoil';
 
 
 
@@ -16,9 +16,11 @@ const App = () => {
                     <Route path = "/path2 입력" element = {<페이지2 선언/>}></Route>
                 </Routes>
             */}
-            <Routes>
-                <Route path="/" element = {<MainPage></MainPage>}></Route>
-            </Routes>
+            <RecoilRoot>
+                <Routes>
+                    <Route path="/" element = {<MainPage></MainPage>}></Route>
+                </Routes>
+            </RecoilRoot>
         </>
     )
 }

@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
 import { Container as MapDiv, NaverMap, Marker, NaverMapsProvider } from 'react-naver-maps';
 
+import { useRecoilValue, selector } from "recoil";
+import { auctionDataState } from "../../../atoms";
+
 const Content = () => {
     
     //Logic 구현 부분
@@ -8,6 +11,12 @@ const Content = () => {
     const [centerLat, setCenterLat] = useState(37.5666103)
     const [centerLng, setCenterLng] = useState(126.9783882)
 
+
+    const auctionDataFromRecoil = useRecoilValue(auctionDataState);
+
+    useEffect(() => {
+        console.log("content data : ", auctionDataFromRecoil);
+    }, [auctionDataFromRecoil])
 
     // naver.maps.Service.geocode({
     //     query: jusoData

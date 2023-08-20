@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Select, Space, Button } from "antd";
 import * as Apis from "../../../utils/Api";
 
+import { useRecoilState } from "recoil";
+import { auctionDataState } from "../../../atoms";
+
 const Header = () => {
 
     const { Option } = Select;
@@ -14,6 +17,9 @@ const Header = () => {
     const [siguList, setSiguList] = useState([]);
     const [sidongList, setSidongList] = useState([]);
     const [siriList, setSiriList] = useState([]);
+
+    //const [auctionDataRecoil, setAuctionDataRecoil] = useState(auctionDataState);
+    const [auctionDataRecoil, setAuctionDataRecoil] = useRecoilState(auctionDataState)
 
     const handleSidoChange = async (value) => {
         setSido(value);
@@ -261,9 +267,12 @@ const Header = () => {
 
         console.log(searchResult);
 
+        setAuctionDataRecoil(searchResult);
+
         
 
         console.log(returnAuctionDatas);
+        
     }
 
     useEffect(() => {
