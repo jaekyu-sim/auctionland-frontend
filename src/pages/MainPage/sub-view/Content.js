@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { Container as MapDiv, NaverMap, Marker, NaverMapsProvider } from 'react-naver-maps';
+import { Container as MapDiv, NaverMap, Marker, NaverMapsProvider, useNavermaps } from 'react-naver-maps';
 
 import { useRecoilValue, selector } from "recoil";
 import { auctionDataState } from "../../../atoms";
@@ -7,6 +7,9 @@ import { auctionDataState } from "../../../atoms";
 const Content = () => {
     
     //Logic 구현 부분
+    //const { naver } = window;
+    //const navermaps = naver.maps;
+    const navermaps = useNavermaps();
 
     const [centerLat, setCenterLat] = useState(37.5666103)
     const [centerLng, setCenterLng] = useState(126.9783882)
@@ -16,7 +19,35 @@ const Content = () => {
 
     useEffect(() => {
         console.log("content data : ", auctionDataFromRecoil);
+        
+            for(let i = 0 ; i < auctionDataFromRecoil.length ; i++)
+            {
+                console.log("navermaps : ", navermaps);
+                console.log("navermaps.Service : ", navermaps.Service);
+                if(navermaps)
+                {
+                    console.log(auctionDataFromRecoil[i].jData);
+                    navermaps.Service.geocode({
+                        query: auctionDataFromRecoil[i].jData
+                    }, function(status, response){
+
+                        let htmlAddresses = [];
+                        let item = response.v2.addresses[0];
+                        let point = new naver.maps.Point(item.x, item.y);
+
+                        console.log("item : ", item);
+
+                    })
+                }
+            }
+        
+        
+        
     }, [auctionDataFromRecoil])
+
+    function auctionMarker(){
+
+    }
 
     // naver.maps.Service.geocode({
     //     query: jusoData
