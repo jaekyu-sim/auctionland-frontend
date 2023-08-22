@@ -14,19 +14,31 @@ const Content = () => {
     const [centerLat, setCenterLat] = useState(37.5666103)
     const [centerLng, setCenterLng] = useState(126.9783882)
 
+    const [markerList, setMarkerList] = useState([]);
+
 
     const auctionDataFromRecoil = useRecoilValue(auctionDataState);
+    
 
-    useEffect(() => {
+    useEffect( () => {
         console.log("content data : ", auctionDataFromRecoil);
-        
+        if(auctionDataFromRecoil.length === 0)
+        {
+
+        }
+        else
+        {
+            let tmpMarkerList = [];
+
             for(let i = 0 ; i < auctionDataFromRecoil.length ; i++)
             {
+
                 console.log("navermaps : ", navermaps);
                 console.log("navermaps.Service : ", navermaps.Service);
                 if(navermaps)
                 {
                     console.log(auctionDataFromRecoil[i].jData);
+
                     navermaps.Service.geocode({
                         query: auctionDataFromRecoil[i].jData
                     }, function(status, response){
@@ -34,16 +46,35 @@ const Content = () => {
                         let htmlAddresses = [];
                         let item = response.v2.addresses[0];
                         let point = new naver.maps.Point(item.x, item.y);
-
-                        console.log("item : ", item);
-
-                    })
+                        setMarkerList((prev) => [...prev, point])
+                        //tmpMarkerList.push(point);
+                        console.log("item : ", item); })
                 }
+                
             }
-        
+
+
+        }
+
+            
+            //console.log("tmpMarkerList : ", tmpMarkerList);
+            //setMarkerList([...tmpMarkerList]);
+
+
+            // dokdo = new naver.maps.LatLngBounds(
+            //     new naver.maps.LatLng(37.2380651, 131.8562652),
+            //     new naver.maps.LatLng(37.2444436, 131.8786475)),
+
+            // const mapBounds = navermaps.LatLngBounds(
+
+            // )
         
         
     }, [auctionDataFromRecoil])
+
+    useEffect(() => {
+        console.log("markerlist : ", markerList)
+    }, [markerList])
 
     function auctionMarker(){
 
