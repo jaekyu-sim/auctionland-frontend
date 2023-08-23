@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { Container as MapDiv, NaverMap, Marker, NaverMapsProvider, useNavermaps } from 'react-naver-maps';
+import { Container as MapDiv, NaverMap, Marker, NaverMapsProvider, useNavermaps, InfoWindow } from 'react-naver-maps';
 
 import { useRecoilValue, selector } from "recoil";
 import { auctionDataState } from "../../../atoms";
@@ -26,6 +26,7 @@ const Content = () => {
     const [targetLocation, setTargetLocation] = useState();
 
     const [loading, setLoading] = useState(false);
+    const [selectedMarker, setSelectedMarker] = useState(null);
 
 
     const auctionDataFromRecoil = useRecoilValue(auctionDataState);
@@ -33,13 +34,15 @@ const Content = () => {
 
     useEffect( () => {
         console.log("content data : ", auctionDataFromRecoil);
+        
         if(auctionDataFromRecoil.length === 0)
         {
-
+            setMarkerList([])
         }
         else
         {
             setLoading(true);
+            setMarkerList([])
 
             let tmpMarkerList = [];
 
@@ -140,35 +143,48 @@ const Content = () => {
         }
 
         setLoading(false)
+        
 
     }, [markerList])
 
     function auctionMarker(){
 
     }
+    const handleMarkerClick = (marker) => {
+        console.log("클릭됨", marker)
+        setSelectedMarker(marker);
+    };
 
     return (
         <Spin tip="경매 결과를 나타내는 중입니다" spinning={loading}>
-        <div style={{backgroundColor:"aqua"}}>
-            Test를 위한 Content 부분 입니다.
-            <MapDiv
-                style={{
-                    height: 800,
-                }}
-                >
-                <NaverMap ref={setMap}>
-                    {markerList.map((marker, index) => (
+            <div style={{ backgroundColor: "aqua", display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height:'100%' }}>
+                    <MapDiv
+                        style={{
+                            height: '80%',
+                            width: "80vw"
+                        }}
+                    >
+                    <NaverMap ref={setMap}>
+                        {markerList.map((marker, index) => (
                         <Marker
                             key={index}
                             position={{ lat: marker.y, lng: marker.x }}
-                            title={`마커 ${index + 1}`}>
-                        </Marker>
-
-                    ))}
-                </NaverMap>
-            </MapDiv>
-            
-        </div>
+                            title={`마커 ${index + 1}`}
+                            onClick={() => handleMarkerClick(marker)}
+                        ></Marker>
+                        ))}
+                        {selectedMarker && (
+                        <InfoWindow content="test">
+                            <h2>선택한 마커 정보</h2>
+                            <p>위도: {selectedMarker.y}</p>
+                            <p>경도: {selectedMarker.x}</p>
+                        </InfoWindow>
+                        )}
+                    </NaverMap>
+                    </MapDiv>
+                </div>
+            </div>
         </Spin>
     )
 }

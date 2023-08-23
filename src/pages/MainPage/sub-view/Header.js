@@ -288,59 +288,64 @@ const Header = () => {
 
     return (
         <Spin tip="경매결과를 조회중입니다." spinning={loading}>
-            <div style={{backgroundColor:"aqua"}}>
-                <label>시/도 : </label>
-                <Select defaultValue="선택"
-                    style={{width : '120px'}}
-                    onChange={handleSidoChange}
-                    value={sido}>
-                    {sidoList.map((option) => (
-                        <Option key={option} value={option}>
-                        {option}
-                        </Option>
-                    ))}
-                </Select>
+            <div style={{height:'10vh'}}>
+                <div id="AuctionLandLogo">
+                    Auction Land
+                </div>
+                <div id="NavBar" style={{ position: 'absolute', bottom: 0, padding: '10px' }}>
+                    <label>시/도 : </label>
+                    <Select defaultValue="선택"
+                        style={{width : '140px', paddingLeft: '5px', paddingRight:'5px'}}
+                        onChange={handleSidoChange}
+                        value={sido}>
+                        {sidoList.map((option) => (
+                            <Option key={option} value={option}>
+                            {option}
+                            </Option>
+                        ))}
+                    </Select>
 
-                <label>시/구 : </label>
-                <Select defaultValue="선택"
-                    style={{width : '120px'}}
-                    onChange={handleSiguChange}
-                    value={sigu}>
-                    {siguList.map((option) => (
-                        <Option key={option} value={option}>
-                        {option}
-                        </Option>
-                    ))}
-                </Select>
+                    <label>시/구 : </label>
+                    <Select defaultValue="선택"
+                        style={{width : '200px', paddingLeft: '5px', paddingRight:'5px'}}
+                        onChange={handleSiguChange}
+                        value={sigu}>
+                        {siguList.map((option) => (
+                            <Option key={option} value={option}>
+                            {option}
+                            </Option>
+                        ))}
+                    </Select>
 
-                <label>동/면 : </label>
-                <Select defaultValue="선택"
-                    style={{width : '120px'}}
-                    onChange={handleSidongChange}
-                    value={sidong}>
-                    {sidongList.map((option) => (
-                        <Option key={option} value={option}>
-                        {option}
-                        </Option>
-                    ))}
-                </Select>
+                    <label>동/면 : </label>
+                    <Select defaultValue="선택"
+                        style={{width : '140px', paddingLeft: '5px', paddingRight:'5px'}}
+                        onChange={handleSidongChange}
+                        value={sidong}>
+                        {sidongList.map((option) => (
+                            <Option key={option} value={option}>
+                            {option}
+                            </Option>
+                        ))}
+                    </Select>
 
-                <label>리 : </label>
-                <Select defaultValue="선택"
-                    style={{width : '120px'}}
-                    onChange={handleSiriChange}
-                    value={siri}>
-                    {sidongList.map((option) => (
-                        <Option key={option} value={option}>
-                        {option}
-                        </Option>
-                    ))}
-                </Select>
+                    <label>리 : </label>
+                    <Select defaultValue="선택"
+                        style={{width : '140px', paddingLeft: '5px', paddingRight:'5px'}}
+                        onChange={handleSiriChange}
+                        value={siri}>
+                        {sidongList.map((option) => (
+                            <Option key={option} value={option}>
+                            {option}
+                            </Option>
+                        ))}
+                    </Select>
 
-                <Button
-                    onClick={handleSearchBtnClick}>
-                    검색
-                </Button>
+                    <Button
+                        onClick={handleSearchBtnClick}>
+                        검색
+                    </Button>
+                </div>
                 {/* 나머지 입력 요소들 */}
             </div>
         </Spin>
