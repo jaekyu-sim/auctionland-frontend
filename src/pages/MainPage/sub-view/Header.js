@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Select, Space, Button } from "antd";
+import { Select, Space, Button, Spin } from "antd";
 import * as Apis from "../../../utils/Api";
 
 import { useRecoilState } from "recoil";
@@ -17,6 +17,8 @@ const Header = () => {
     const [siguList, setSiguList] = useState([]);
     const [sidongList, setSidongList] = useState([]);
     const [siriList, setSiriList] = useState([]);
+
+    const [loading, setLoading] = useState(false);
 
     //const [auctionDataRecoil, setAuctionDataRecoil] = useState(auctionDataState);
     const [auctionDataRecoil, setAuctionDataRecoil] = useRecoilState(auctionDataState)
@@ -85,6 +87,8 @@ const Header = () => {
         // 버튼 클릭 시 해당하는 경매 데이터 불러오는 부분.
 
         let searchResult = [];
+
+        setLoading(true);
         
 
         // 1. 우선 Location 정보 파라미터 제작
@@ -263,6 +267,7 @@ const Header = () => {
 
             searchResult.push({jData : jusoData, gPrice : gamjeongPrice, cPrice : choijeoIpchalPrice, yNum : yucahlNum});
 
+            
         }
 
         console.log(searchResult);
@@ -272,6 +277,8 @@ const Header = () => {
         
 
         console.log(returnAuctionDatas);
+
+        setLoading(false);
         
     }
 
@@ -280,61 +287,63 @@ const Header = () => {
     }, []);
 
     return (
-        <div style={{backgroundColor:"aqua"}}>
-            <label>시/도 : </label>
-            <Select defaultValue="선택"
-                style={{width : '120px'}}
-                onChange={handleSidoChange}
-                value={sido}>
-                {sidoList.map((option) => (
-                    <Option key={option} value={option}>
-                      {option}
-                    </Option>
-                  ))}
-            </Select>
+        <Spin tip="경매결과를 조회중입니다." spinning={loading}>
+            <div style={{backgroundColor:"aqua"}}>
+                <label>시/도 : </label>
+                <Select defaultValue="선택"
+                    style={{width : '120px'}}
+                    onChange={handleSidoChange}
+                    value={sido}>
+                    {sidoList.map((option) => (
+                        <Option key={option} value={option}>
+                        {option}
+                        </Option>
+                    ))}
+                </Select>
 
-            <label>시/구 : </label>
-            <Select defaultValue="선택"
-                style={{width : '120px'}}
-                onChange={handleSiguChange}
-                value={sigu}>
-                {siguList.map((option) => (
-                    <Option key={option} value={option}>
-                      {option}
-                    </Option>
-                  ))}
-            </Select>
+                <label>시/구 : </label>
+                <Select defaultValue="선택"
+                    style={{width : '120px'}}
+                    onChange={handleSiguChange}
+                    value={sigu}>
+                    {siguList.map((option) => (
+                        <Option key={option} value={option}>
+                        {option}
+                        </Option>
+                    ))}
+                </Select>
 
-            <label>동/면 : </label>
-            <Select defaultValue="선택"
-                style={{width : '120px'}}
-                onChange={handleSidongChange}
-                value={sidong}>
-                {sidongList.map((option) => (
-                    <Option key={option} value={option}>
-                      {option}
-                    </Option>
-                  ))}
-            </Select>
+                <label>동/면 : </label>
+                <Select defaultValue="선택"
+                    style={{width : '120px'}}
+                    onChange={handleSidongChange}
+                    value={sidong}>
+                    {sidongList.map((option) => (
+                        <Option key={option} value={option}>
+                        {option}
+                        </Option>
+                    ))}
+                </Select>
 
-            <label>리 : </label>
-            <Select defaultValue="선택"
-                style={{width : '120px'}}
-                onChange={handleSiriChange}
-                value={siri}>
-                {sidongList.map((option) => (
-                    <Option key={option} value={option}>
-                      {option}
-                    </Option>
-                  ))}
-            </Select>
+                <label>리 : </label>
+                <Select defaultValue="선택"
+                    style={{width : '120px'}}
+                    onChange={handleSiriChange}
+                    value={siri}>
+                    {sidongList.map((option) => (
+                        <Option key={option} value={option}>
+                        {option}
+                        </Option>
+                    ))}
+                </Select>
 
-            <Button
-                onClick={handleSearchBtnClick}>
-                검색
-            </Button>
-            {/* 나머지 입력 요소들 */}
-        </div>
+                <Button
+                    onClick={handleSearchBtnClick}>
+                    검색
+                </Button>
+                {/* 나머지 입력 요소들 */}
+            </div>
+        </Spin>
     )
 }
 

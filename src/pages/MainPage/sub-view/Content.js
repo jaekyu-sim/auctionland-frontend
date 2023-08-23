@@ -4,6 +4,8 @@ import { Container as MapDiv, NaverMap, Marker, NaverMapsProvider, useNavermaps 
 import { useRecoilValue, selector } from "recoil";
 import { auctionDataState } from "../../../atoms";
 
+import { Spin } from 'antd';
+
 const Content = () => {
     
     //Logic 구현 부분
@@ -11,10 +13,19 @@ const Content = () => {
     //const navermaps = naver.maps;
     const navermaps = useNavermaps();
 
+    const [map, setMap] = useState(null);
+
     const [centerLat, setCenterLat] = useState(37.5666103)
     const [centerLng, setCenterLng] = useState(126.9783882)
 
     const [markerList, setMarkerList] = useState([]);
+    const [markerPrintList, setMarkerPrintList] = useState([]);
+
+    const [minMaxLatLng, setMinMaxLatLng] = useState([9999, 9999, 0, 0]);
+
+    const [targetLocation, setTargetLocation] = useState();
+
+    const [loading, setLoading] = useState(false);
 
 
     const auctionDataFromRecoil = useRecoilValue(auctionDataState);
@@ -28,6 +39,8 @@ const Content = () => {
         }
         else
         {
+            setLoading(true);
+
             let tmpMarkerList = [];
 
             for(let i = 0 ; i < auctionDataFromRecoil.length ; i++)
@@ -53,6 +66,8 @@ const Content = () => {
                 
             }
 
+            
+
 
         }
 
@@ -74,51 +89,66 @@ const Content = () => {
 
     useEffect(() => {
         console.log("markerlist : ", markerList)
+
+        if(markerList.length === auctionDataFromRecoil.length)
+        {
+            console.log("길이 같아짐")
+            setMarkerPrintList(markerList);
+            let minLat = 9999;
+            let minLng = 9999;
+            let maxLat = 0;
+            let maxLng = 0;
+            for(let i = 0 ; i < markerList.length ; i++)
+            {
+                if(markerList[i].x < minLat)
+                {
+                    minLat = markerList[i].x;
+                }
+                if(markerList[i].x > maxLat)
+                {
+                    maxLat = markerList[i].x;
+                }
+                if(markerList[i].y < minLng)
+                {
+                    minLng = markerList[i].y;
+                }
+                if(markerList[i].y > maxLng)
+                {
+                    maxLng = markerList[i].y;
+                }
+            }
+
+            console.log(minLat, minLng, maxLat, maxLng);
+            
+            let tmpTargetLocation = new navermaps.LatLngBounds(
+                new navermaps.LatLng(minLng, minLat),
+                new navermaps.LatLng(maxLng, maxLat)
+            )
+            
+            if(map)
+            {
+                console.log("tmpTargetLocation : ", tmpTargetLocation)
+                map.fitBounds(tmpTargetLocation);
+            }
+            setTargetLocation(tmpTargetLocation);
+            console.log("markerlsit : ::", markerList);
+            for(let i = 0 ; i < markerList.length ; i++)
+            {
+                console.log("marker1 : ", markerList[i].x, markerList[i].y)
+            }
+            setMarkerList(markerList);
+        }
+
+        setLoading(false)
+
     }, [markerList])
 
     function auctionMarker(){
 
     }
 
-    // naver.maps.Service.geocode({
-    //     query: jusoData
-    // }, function(status, response) {
-    //     if (status === naver.maps.Service.Status.ERROR) {
-    //         return alert('Something Wrong!');
-    //     }
-
-    //     if (response.v2.meta.totalCount === 0) {
-    //         return alert('totalCount' + response.v2.meta.totalCount);
-    //     }
-
-    //     var htmlAddresses = [],
-    //         item = response.v2.addresses[0],
-    //         point = new naver.maps.Point(item.x, item.y);
-
-    //     if (item.roadAddress) {
-    //         htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
-    //     }
-
-    //     if (item.jibunAddress) {
-    //         htmlAddresses.push('[지번 주소] ' + item.jibunAddress);
-    //     }
-
-    //     if (item.englishAddress) {
-    //         htmlAddresses.push('[영문명 주소] ' + item.englishAddress);
-    //     }
-
-    //     infoWindow.setContent([
-    //         '<div style="padding:10px;min-width:200px;line-height:150%;">',
-    //         '<h4 style="margin-top:5px;">검색 주소 : '+ address +'</h4><br />',
-    //         htmlAddresses.join('<br />'),
-    //         '</div>'
-    //     ].join('\n'));
-
-    //     map.setCenter(point);
-    //     infoWindow.open(map, point);
-    // });
-
     return (
+        <Spin tip="경매 결과를 나타내는 중입니다" spinning={loading}>
         <div style={{backgroundColor:"aqua"}}>
             Test를 위한 Content 부분 입니다.
             <MapDiv
@@ -126,12 +156,20 @@ const Content = () => {
                     height: 800,
                 }}
                 >
-                <NaverMap>
-                    <Marker defaultPosition={{ lat: centerLat, lng: centerLng }} />
+                <NaverMap ref={setMap}>
+                    {markerList.map((marker, index) => (
+                        <Marker
+                            key={index}
+                            position={{ lat: marker.y, lng: marker.x }}
+                            title={`마커 ${index + 1}`}>
+                        </Marker>
+
+                    ))}
                 </NaverMap>
             </MapDiv>
             
         </div>
+        </Spin>
     )
 }
 export default Content;
