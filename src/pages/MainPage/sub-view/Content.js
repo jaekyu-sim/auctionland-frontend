@@ -35,6 +35,7 @@ const Content = () => {
 
 
     const auctionDataFromRecoil = useRecoilValue(auctionDataState);
+    const [etcAuctionData, setEtcAuctionData] = useState([]);
     
 
     useEffect( () => {
@@ -53,7 +54,6 @@ const Content = () => {
 
             for(let i = 0 ; i < auctionDataFromRecoil.length ; i++)
             {
-
                 console.log("navermaps : ", navermaps);
                 console.log("navermaps.Service : ", navermaps.Service);
                 if(navermaps)
@@ -100,7 +100,6 @@ const Content = () => {
 
         if(markerList.length === auctionDataFromRecoil.length)
         {
-            console.log("길이 같아짐")
             setMarkerPrintList(markerList);
             let minLat = 9999;
             let minLng = 9999;
@@ -143,12 +142,6 @@ const Content = () => {
             for(let i = 0 ; i < markerList.length ; i++)
             {
                 console.log("marker1 : ", markerList[i].x, markerList[i].y)
-                let markerTmp = markerList[i]
-                console.log("marlistTmp : ", markerTmp.x)
-                // let infoWindow = new navermaps.InfoWindow({
-                //     content: '<div style="width:150px;text-align:center;padding:10px;">The Letter is <b>"'+ key.substr(0, 1) +'"</b>.</div>'
-                // });
-                // infoWindows.push(infoWindow);
             }
             setMarkerList(markerList);
         }
@@ -161,7 +154,7 @@ const Content = () => {
     function auctionMarker(){
 
     }
-    const handleMarkerClick = (marker) => {
+    const handleMarkerClick = (marker, index) => {
         
         // 마커 클릭 시 MarkerInfo 창의 위치 계산
         const offsetX = 30; // 마커 옆에 표시하려면 좌표를 조정합니다.
@@ -172,6 +165,14 @@ const Content = () => {
         };
         setInfoWindowPosition(infoWindowPosition);
         setSelectedMarker(marker);
+        const tmpJData = auctionDataFromRecoil[index].jData;
+        const tmpGPrice = auctionDataFromRecoil[index].gPrice;
+        const tmpCPrice = auctionDataFromRecoil[index].cPrice;
+        const tmpYNum = auctionDataFromRecoil[index].yNum;
+        
+        console.log(tmpJData, tmpGPrice, tmpCPrice, tmpYNum)
+        const tmpEtcAuctionData = {jData : tmpJData, gPrice : tmpGPrice, cPrice : tmpCPrice, yNum : tmpYNum}
+        setEtcAuctionData(tmpEtcAuctionData)
     };
 
     
@@ -193,12 +194,12 @@ const Content = () => {
                                 key={index}
                                 position={{ lat: marker.y, lng: marker.x }}
                                 title={`경매물 ${index + 1}`}
-                                onClick={() => {handleMarkerClick(marker)}}
+                                onClick={() => {handleMarkerClick(marker, index)}}
                             ></Marker>
                         ))}
                     </NaverMap>
                     {selectedMarker && (
-                        <MarkerInfo marker={selectedMarker} position={infoWindowPosition} />
+                        <MarkerInfo marker={selectedMarker} position={infoWindowPosition} address={etcAuctionData.jData} gPrice={etcAuctionData.gPrice} cPrice={etcAuctionData.cPrice} />
                     )}
                     </MapDiv>
                 </div>

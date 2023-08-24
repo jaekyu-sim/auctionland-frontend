@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MarkerInfo = ({ marker, position }) => {
+const MarkerInfo = ({ marker, position, address, gPrice, cPrice}) => {
   const infoWindowStyle = {
     position: 'absolute',
     top: `${position.lat}px`,
@@ -13,9 +13,13 @@ const MarkerInfo = ({ marker, position }) => {
 
   return (
     <div style={infoWindowStyle}>
-      <h3>마커 정보</h3>
-      <p>위도: {marker.y}</p>
-      <p>경도: {marker.x}</p>
+      <h3>경매물 정보</h3>
+      <p>주소 : {address}</p>
+      <p>법원 감정 가격 : {gPrice}</p>
+      <p>최저 입찰 가격 : {cPrice} / 법원 감정가격 대비 ** %</p>
+      <p>이미지</p>
+      <p>평당 가격 : </p>
+      <p></p>
     </div>
   );
 };
