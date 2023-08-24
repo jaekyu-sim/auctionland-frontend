@@ -4,7 +4,9 @@ import { Container as MapDiv, NaverMap, Marker, NaverMapsProvider, useNavermaps,
 import { useRecoilValue, selector } from "recoil";
 import { auctionDataState } from "../../../atoms";
 
-import { Spin } from 'antd';
+import { Spin, Popover } from 'antd';
+
+import MarkerInfo from '../../../components/MarkerInfo';
 
 const Content = () => {
     
@@ -12,6 +14,8 @@ const Content = () => {
     //const { naver } = window;
     //const navermaps = naver.maps;
     const navermaps = useNavermaps();
+
+    //let infoWindows = [];
 
     const [map, setMap] = useState(null);
 
@@ -27,6 +31,7 @@ const Content = () => {
 
     const [loading, setLoading] = useState(false);
     const [selectedMarker, setSelectedMarker] = useState(null);
+    const [infoWindowPosition, setInfoWindowPosition] = useState(null);
 
 
     const auctionDataFromRecoil = useRecoilValue(auctionDataState);
@@ -138,6 +143,12 @@ const Content = () => {
             for(let i = 0 ; i < markerList.length ; i++)
             {
                 console.log("marker1 : ", markerList[i].x, markerList[i].y)
+                let markerTmp = markerList[i]
+                console.log("marlistTmp : ", markerTmp.x)
+                // let infoWindow = new navermaps.InfoWindow({
+                //     content: '<div style="width:150px;text-align:center;padding:10px;">The Letter is <b>"'+ key.substr(0, 1) +'"</b>.</div>'
+                // });
+                // infoWindows.push(infoWindow);
             }
             setMarkerList(markerList);
         }
@@ -151,9 +162,20 @@ const Content = () => {
 
     }
     const handleMarkerClick = (marker) => {
-        console.log("클릭됨", marker)
+        
+        // 마커 클릭 시 MarkerInfo 창의 위치 계산
+        const offsetX = 30; // 마커 옆에 표시하려면 좌표를 조정합니다.
+        const offsetY = -30; // 마찬가지로 좌표를 조정합니다.
+        const infoWindowPosition = {
+        lat: marker.y + offsetY,
+        lng: marker.x + offsetX,
+        };
+        setInfoWindowPosition(infoWindowPosition);
         setSelectedMarker(marker);
     };
+
+    
+    
 
     return (
         <Spin tip="경매 결과를 나타내는 중입니다" spinning={loading}>
@@ -167,21 +189,17 @@ const Content = () => {
                     >
                     <NaverMap ref={setMap}>
                         {markerList.map((marker, index) => (
-                        <Marker
-                            key={index}
-                            position={{ lat: marker.y, lng: marker.x }}
-                            title={`마커 ${index + 1}`}
-                            onClick={() => handleMarkerClick(marker)}
-                        ></Marker>
+                            <Marker
+                                key={index}
+                                position={{ lat: marker.y, lng: marker.x }}
+                                title={`경매물 ${index + 1}`}
+                                onClick={() => {handleMarkerClick(marker)}}
+                            ></Marker>
                         ))}
-                        {selectedMarker && (
-                        <InfoWindow content="test">
-                            <h2>선택한 마커 정보</h2>
-                            <p>위도: {selectedMarker.y}</p>
-                            <p>경도: {selectedMarker.x}</p>
-                        </InfoWindow>
-                        )}
                     </NaverMap>
+                    {selectedMarker && (
+                        <MarkerInfo marker={selectedMarker} position={infoWindowPosition} />
+                    )}
                     </MapDiv>
                 </div>
             </div>
