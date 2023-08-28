@@ -3,7 +3,7 @@ import { Select, Space, Button, Spin } from "antd";
 import * as Apis from "../../../utils/Api";
 
 import { useRecoilState } from "recoil";
-import { auctionDataState } from "../../../atoms";
+import { auctionDataState, locationCodeDataState } from "../../../atoms";
 
 const Header = () => {
 
@@ -22,6 +22,7 @@ const Header = () => {
 
     //const [auctionDataRecoil, setAuctionDataRecoil] = useState(auctionDataState);
     const [auctionDataRecoil, setAuctionDataRecoil] = useRecoilState(auctionDataState)
+    const [locationCodeRecoil, setLocationCodeRecoil] = useRecoilState(locationCodeDataState)
 
     const handleSidoChange = async (value) => {
         setSido(value);
@@ -90,11 +91,17 @@ const Header = () => {
 
         setLoading(true);
         
+        
 
         // 1. 우선 Location 정보 파라미터 제작
         const locationDatas = {daepyoSidoCd: sido, daepyoSiguCd : sigu, daepyoSidongCd : sidong, daepyoSiriCd : siri}
 
         const returnAuctionDatas = await Apis.getAPI("/api/auctionland/getAuctionData", {params: locationDatas})
+        
+        const returnLocationCodeData = await Apis.getAPI("/api/auctionland/getLocationCodeData", {params: locationDatas})
+        
+
+        
 
         for(let i = 0 ; i < returnAuctionDatas.data.length ; i++)
         {
@@ -273,6 +280,7 @@ const Header = () => {
         console.log(searchResult);
 
         setAuctionDataRecoil(searchResult);
+        setLocationCodeRecoil(returnLocationCodeData);
 
         
 

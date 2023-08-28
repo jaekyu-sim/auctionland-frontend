@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
-import { Container as MapDiv, NaverMap, Marker, NaverMapsProvider, useNavermaps, InfoWindow } from 'react-naver-maps';
+import React, {useEffect, useState, useRef} from "react";
+import { Container as MapDiv, NaverMap, Marker, NaverMapsProvider, useNavermaps, InfoWindow, Listener, Overlay } from 'react-naver-maps';
 
 import { useRecoilValue, selector } from "recoil";
-import { auctionDataState } from "../../../atoms";
+import { auctionDataState, locationCodeDataState } from "../../../atoms";
 
 import { Spin, Popover } from 'antd';
 
@@ -35,11 +35,14 @@ const Content = () => {
 
 
     const auctionDataFromRecoil = useRecoilValue(auctionDataState);
+    const locationCodeDataFromRecoil = useRecoilValue(locationCodeDataState);
     const [etcAuctionData, setEtcAuctionData] = useState([]);
+
+    const markerRef = useRef(null);
     
 
     useEffect( () => {
-        console.log("content data : ", auctionDataFromRecoil);
+        //console.log("content data : ", auctionDataFromRecoil);
         
         if(auctionDataFromRecoil.length === 0)
         {
@@ -54,11 +57,11 @@ const Content = () => {
 
             for(let i = 0 ; i < auctionDataFromRecoil.length ; i++)
             {
-                console.log("navermaps : ", navermaps);
-                console.log("navermaps.Service : ", navermaps.Service);
+                //console.log("navermaps : ", navermaps);
+                //console.log("navermaps.Service : ", navermaps.Service);
                 if(navermaps)
                 {
-                    console.log(auctionDataFromRecoil[i].jData);
+                    //console.log(auctionDataFromRecoil[i].jData);
 
                     navermaps.Service.geocode({
                         query: auctionDataFromRecoil[i].jData
@@ -67,9 +70,11 @@ const Content = () => {
                         let htmlAddresses = [];
                         let item = response.v2.addresses[0];
                         let point = new naver.maps.Point(item.x, item.y);
-                        setMarkerList((prev) => [...prev, point])
+                        let value = {id : i, location : point}
+                        setMarkerList((prev) => [...prev, value])
                         //tmpMarkerList.push(point);
-                        console.log("item : ", item); })
+                        //console.log("item : ", item);
+                     })
                 }
                 
             }
@@ -96,7 +101,7 @@ const Content = () => {
     }, [auctionDataFromRecoil])
 
     useEffect(() => {
-        console.log("markerlist : ", markerList)
+        //console.log("markerlist : ", markerList)
 
         if(markerList.length === auctionDataFromRecoil.length)
         {
@@ -107,25 +112,25 @@ const Content = () => {
             let maxLng = 0;
             for(let i = 0 ; i < markerList.length ; i++)
             {
-                if(markerList[i].x < minLat)
+                if(markerList[i].location.x < minLat)
                 {
-                    minLat = markerList[i].x;
+                    minLat = markerList[i].location.x;
                 }
-                if(markerList[i].x > maxLat)
+                if(markerList[i].location.x > maxLat)
                 {
-                    maxLat = markerList[i].x;
+                    maxLat = markerList[i].location.x;
                 }
-                if(markerList[i].y < minLng)
+                if(markerList[i].location.y < minLng)
                 {
-                    minLng = markerList[i].y;
+                    minLng = markerList[i].location.y;
                 }
-                if(markerList[i].y > maxLng)
+                if(markerList[i].location.y > maxLng)
                 {
-                    maxLng = markerList[i].y;
+                    maxLng = markerList[i].location.y;
                 }
             }
 
-            console.log(minLat, minLng, maxLat, maxLng);
+            //console.log(minLat, minLng, maxLat, maxLng);
             
             let tmpTargetLocation = new navermaps.LatLngBounds(
                 new navermaps.LatLng(minLng, minLat),
@@ -134,14 +139,14 @@ const Content = () => {
             
             if(map)
             {
-                console.log("tmpTargetLocation : ", tmpTargetLocation)
+                //console.log("tmpTargetLocation : ", tmpTargetLocation)
                 map.fitBounds(tmpTargetLocation);
             }
             setTargetLocation(tmpTargetLocation);
-            console.log("markerlsit : ::", markerList);
+            //console.log("markerlsit : ::", markerList);
             for(let i = 0 ; i < markerList.length ; i++)
             {
-                console.log("marker1 : ", markerList[i].x, markerList[i].y)
+                //console.log("marker1 : ", markerList[i].location.x, markerList[i].location.y)
             }
             setMarkerList(markerList);
         }
@@ -151,7 +156,16 @@ const Content = () => {
 
     }, [markerList])
 
-    function auctionMarker(){
+    function markerCompare(marker){
+        if(navermaps)
+        {
+            if(marker === selectedMarker)
+            {
+                return navermaps.Animation.BOUNCE
+            }
+
+        }
+
 
     }
     const handleMarkerClick = (marker, index) => {
@@ -163,16 +177,38 @@ const Content = () => {
         lat: marker.y + offsetY,
         lng: marker.x + offsetX,
         };
+        const tmpSelectedMarker = marker;
         setInfoWindowPosition(infoWindowPosition);
         setSelectedMarker(marker);
+
+        console.log("recoil : ", locationCodeDataFromRecoil.data.locationCode)
+        // if (markerRef.current) {
+        //     const markerInstance = markerRef.current;
+        //     // markerInstance를 사용하여 마커 정보를 가져오거나 조작합니다.
+        //     console.log("marker 정보 : ", markerInstance)
+        //     console.log("marker Position : ", markerInstance.getPosition()); // 마커의 위치 가져오기 예시
+
+        //     if(markerInstance.getAnimation() === null)
+        //     {
+        //         markerInstance.setAnimation(navermaps.Animation.BOUNCE)
+        //     }
+        //     else
+        //     {
+        //         markerInstance.setAnimation(null)
+        //     }
+        // }
+        
+
         const tmpJData = auctionDataFromRecoil[index].jData;
         const tmpGPrice = auctionDataFromRecoil[index].gPrice;
         const tmpCPrice = auctionDataFromRecoil[index].cPrice;
         const tmpYNum = auctionDataFromRecoil[index].yNum;
         
-        console.log(tmpJData, tmpGPrice, tmpCPrice, tmpYNum)
+        //console.log(tmpJData, tmpGPrice, tmpCPrice, tmpYNum)
         const tmpEtcAuctionData = {jData : tmpJData, gPrice : tmpGPrice, cPrice : tmpCPrice, yNum : tmpYNum}
         setEtcAuctionData(tmpEtcAuctionData)
+
+
     };
 
     
@@ -191,11 +227,14 @@ const Content = () => {
                     <NaverMap ref={setMap}>
                         {markerList.map((marker, index) => (
                             <Marker
+                                ref={markerRef}
                                 key={index}
-                                position={{ lat: marker.y, lng: marker.x }}
+                                position={{ lat: marker.location.y, lng: marker.location.x }}
                                 title={`경매물 ${index + 1}`}
                                 onClick={() => {handleMarkerClick(marker, index)}}
-                            ></Marker>
+                                //animation={}
+                            >
+                            </Marker>
                         ))}
                     </NaverMap>
                     {selectedMarker && (
