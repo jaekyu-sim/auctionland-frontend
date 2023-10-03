@@ -3,7 +3,7 @@ import { Select, Space, Button, Spin } from "antd";
 import * as Apis from "../../../utils/Api";
 
 import { useRecoilState } from "recoil";
-import { auctionDataState, locationCodeDataState } from "../../../atoms";
+import { auctionDataState, locationCodeDataState, searchFlagDataState } from "../../../atoms";
 
 const Header = () => {
 
@@ -20,9 +20,12 @@ const Header = () => {
 
     const [loading, setLoading] = useState(false);
 
+    
     //const [auctionDataRecoil, setAuctionDataRecoil] = useState(auctionDataState);
-    const [auctionDataRecoil, setAuctionDataRecoil] = useRecoilState(auctionDataState)
-    const [locationCodeRecoil, setLocationCodeRecoil] = useRecoilState(locationCodeDataState)
+    const [auctionDataRecoil, setAuctionDataRecoil] = useRecoilState(auctionDataState);
+    const [locationCodeRecoil, setLocationCodeRecoil] = useRecoilState(locationCodeDataState);
+    const [searchFlagRecoil, setSearchFlagRecoil] = useRecoilState(searchFlagDataState);
+    
 
     const handleSidoChange = async (value) => {
         setSido(value);
@@ -87,9 +90,14 @@ const Header = () => {
     const handleSearchBtnClick = async () => {
         // 버튼 클릭 시 해당하는 경매 데이터 불러오는 부분.
 
+        
+
+
         let searchResult = [];
 
         setLoading(true);
+        //let tmpFlagState = {flatState:true}
+        //setSearchFlagRecoil(tmpFlagState);
         
         
 

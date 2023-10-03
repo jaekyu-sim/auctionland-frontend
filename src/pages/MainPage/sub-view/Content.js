@@ -168,7 +168,7 @@ const Content = () => {
 
 
     }
-    const handleMarkerClick = (marker, index) => {
+    const handleMarkerClick = async (marker, index) => {
         
         // 마커 클릭 시 MarkerInfo 창의 위치 계산
         const offsetX = 30; // 마커 옆에 표시하려면 좌표를 조정합니다.
@@ -182,6 +182,9 @@ const Content = () => {
         setSelectedMarker(marker);
 
         console.log("recoil : ", locationCodeDataFromRecoil.data.locationCode)
+
+        
+
         // if (markerRef.current) {
         //     const markerInstance = markerRef.current;
         //     // markerInstance를 사용하여 마커 정보를 가져오거나 조작합니다.
@@ -207,6 +210,12 @@ const Content = () => {
         //console.log(tmpJData, tmpGPrice, tmpCPrice, tmpYNum)
         const tmpEtcAuctionData = {jData : tmpJData, gPrice : tmpGPrice, cPrice : tmpCPrice, yNum : tmpYNum}
         setEtcAuctionData(tmpEtcAuctionData)
+
+
+        //전자정부 API 호출 부분.
+        let locationCodeDataForCallGovAPI = locationCodeDataFromRecoil.data.locationCode.substring(0, 5);
+
+        //let realTradeDate = await Apis.getAPI("/api/auctionland/getRealTradeData", {params: locationCodeDataForCallGovAPI})
 
 
     };

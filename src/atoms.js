@@ -6,8 +6,13 @@ export const auctionDataState = atom({
 });
 
 export const locationCodeDataState = atom({
-    key:'locationCodeData',
-    default: [
-      ""
-    ]
-  });
+  key:'locationCodeData',
+  default: [
+    ""
+  ]
+});
+
+export const searchFlagDataState = atom({
+  key: 'searchFlag',
+  defalut: false
+});
