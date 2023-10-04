@@ -24,7 +24,7 @@ const Header = () => {
     //const [auctionDataRecoil, setAuctionDataRecoil] = useState(auctionDataState);
     const [auctionDataRecoil, setAuctionDataRecoil] = useRecoilState(auctionDataState);
     const [locationCodeRecoil, setLocationCodeRecoil] = useRecoilState(locationCodeDataState);
-    const [searchFlagRecoil, setSearchFlagRecoil] = useRecoilState(searchFlagDataState);
+    //const [searchFlagRecoil, setSearchFlagRecoil] = useRecoilState(searchFlagDataState);
     
 
     const handleSidoChange = async (value) => {
