@@ -305,7 +305,7 @@ const Header = () => {
     return (
         <Spin tip="경매결과를 조회중입니다." spinning={loading}>
             <div style={{height:'10vh'}}>
-                <div id="AuctionLandLogo">
+                <div id="AuctionLandLogo" className="header-logo">
                     Auction Land
                 </div>
                 <div id="NavBar" style={{ position: 'absolute', bottom: 0, padding: '10px' }}>
