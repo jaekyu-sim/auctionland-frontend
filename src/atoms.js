@@ -13,6 +13,6 @@ export const locationCodeDataState = atom({
 });
 
 export const searchFlagDataState = atom({
-  key: 'searchFlag',
-  defalut: false
+  key: 'searchFlagData',
+  defalut: [""]
 });

@@ -15,13 +15,22 @@ const MainPage = () => {
     const [id, setId] = useState()
     const [pw, setPw] = useState()
 
+    const [searchFlag, setSearchFlag] = useState(false);
+    
+    const handleFlag = (value) => {
+        console.log(value);
+        setSearchFlag(true);
+    }
+
+
+
     const submitUserInformation = () => {
         console.log("id : ", id , ", pw : ", pw)
     }
     return(
         <div style={{flexDirection:'column', display:'flex'}}>
-            <Header></Header>
-            <Content></Content>
+            <Header onDataHandle = {handleFlag}></Header>
+            <Content flagState = {searchFlag}></Content>
             
         </div>
     )

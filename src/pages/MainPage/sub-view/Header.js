@@ -5,7 +5,7 @@ import * as Apis from "../../../utils/Api";
 import { useRecoilState } from "recoil";
 import { auctionDataState, locationCodeDataState, searchFlagDataState } from "../../../atoms";
 
-const Header = () => {
+const Header = (props) => {
 
     const { Option } = Select;
     
@@ -20,12 +20,18 @@ const Header = () => {
 
     const [loading, setLoading] = useState(false);
 
+    //const [searchFlag, setSearchFlag] = useState(false);
+
     
     //const [auctionDataRecoil, setAuctionDataRecoil] = useState(auctionDataState);
     const [auctionDataRecoil, setAuctionDataRecoil] = useRecoilState(auctionDataState);
     const [locationCodeRecoil, setLocationCodeRecoil] = useRecoilState(locationCodeDataState);
     //const [searchFlagRecoil, setSearchFlagRecoil] = useRecoilState(searchFlagDataState);
-    
+
+    const handleFlag = () => {
+        props.onDataHandle(true);
+    }
+
 
     const handleSidoChange = async (value) => {
         setSido(value);
@@ -293,6 +299,7 @@ const Header = () => {
         
 
         console.log(returnAuctionDatas);
+        handleFlag()
 
         setLoading(false);
         

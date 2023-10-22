@@ -8,7 +8,7 @@ import { Spin, Popover } from 'antd';
 
 import MarkerInfo from '../../../components/MarkerInfo';
 
-const Content = () => {
+const Content = (props) => {
     
     //Logic 구현 부분
     //const { naver } = window;
@@ -50,6 +50,7 @@ const Content = () => {
         }
         else
         {
+            setSelectedMarker(null);
             setLoading(true);
             setMarkerList([])
 
