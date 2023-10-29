@@ -1,7 +1,7 @@
 //get, post api 구현
 import axios from "axios";
 
-//api 모음
+//api 모음 code
 const baseURL = process.env.API_SERVER;
 const config = {
     baseURL: baseURL,
