@@ -17,8 +17,6 @@ const MarkerInfo = ({ marker, position, address, gPrice, cPrice}) => {
       <p>주소 : {address}</p>
       <p>법원 감정 가격 : {gPrice}</p>
       <p>최저 입찰 가격 : {cPrice} / 법원 감정가격 대비 ** %</p>
-      <p>이미지</p>
-      <p>평당 가격 : </p>
       <p></p>
     </div>
   );

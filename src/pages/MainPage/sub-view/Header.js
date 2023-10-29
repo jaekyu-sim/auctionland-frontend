@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Select, Space, Button, Spin } from "antd";
 import * as Apis from "../../../utils/Api";
 
+import "./Header.css"
+
 import { useRecoilState } from "recoil";
 import { auctionDataState, locationCodeDataState, searchFlagDataState } from "../../../atoms";
 
@@ -311,12 +313,12 @@ const Header = (props) => {
 
     return (
         <Spin tip="경매결과를 조회중입니다." spinning={loading}>
-            <div style={{height:'10vh'}}>
+            <div style={{height:'10vh', backgroundColor:'#f0f0f0'}}>
                 <div id="AuctionLandLogo" className="header-logo">
                     Auction Land
                 </div>
-                <div id="NavBar" style={{ position: 'absolute', bottom: 0, padding: '10px' }}>
-                    <label>시/도 : </label>
+                <div id="NavBar" style={{ position: 'absolute', bottom: 0, padding: '10px', width: '100%' }}>
+                    <label className="header-label">시/도 : </label>
                     <Select defaultValue="선택"
                         style={{width : '140px', paddingLeft: '5px', paddingRight:'5px'}}
                         onChange={handleSidoChange}
@@ -328,7 +330,7 @@ const Header = (props) => {
                         ))}
                     </Select>
 
-                    <label>시/구 : </label>
+                    <label className="header-label">시/구 : </label>
                     <Select defaultValue="선택"
                         style={{width : '200px', paddingLeft: '5px', paddingRight:'5px'}}
                         onChange={handleSiguChange}
@@ -340,7 +342,7 @@ const Header = (props) => {
                         ))}
                     </Select>
 
-                    <label>동/면 : </label>
+                    <label className="header-label">동/면 : </label>
                     <Select defaultValue="선택"
                         style={{width : '140px', paddingLeft: '5px', paddingRight:'5px'}}
                         onChange={handleSidongChange}
@@ -352,7 +354,7 @@ const Header = (props) => {
                         ))}
                     </Select>
 
-                    <label>리 : </label>
+                    <label className="header-label">리 : </label>
                     <Select defaultValue="선택"
                         style={{width : '140px', paddingLeft: '5px', paddingRight:'5px'}}
                         onChange={handleSiriChange}
@@ -364,7 +366,7 @@ const Header = (props) => {
                         ))}
                     </Select>
 
-                    <Button
+                    <Button style={{paddingLeft: '20px'}}
                         onClick={handleSearchBtnClick}>
                         검색
                     </Button>

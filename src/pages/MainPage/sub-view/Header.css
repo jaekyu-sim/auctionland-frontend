@@ -1,8 +1,20 @@
 .header-logo {
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0; /* 배경색 설정 */
+    align-items: center; */
+	padding-left: 2%;
+	padding-top: 0.5%;
+	font-family: 'Raleway', sans-serif;
+	font-size: 25pt;
+    /* background-color: #f0f0f0; */
+}
+
+.header-label {
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+	font-family: 'Raleway', sans-serif;
+    /* background-color: #f0f0f0; */
 }
 
 .text-container {

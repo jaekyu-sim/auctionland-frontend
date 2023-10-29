@@ -226,7 +226,7 @@ const Content = (props) => {
 
     return (
         <Spin tip="경매 결과를 나타내는 중입니다" spinning={loading}>
-            <div style={{ backgroundColor: "aqua", display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+            <div style={{ backgroundColor:"#e0e0e0", display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height:'100%' }}>
                     <MapDiv
                         style={{
