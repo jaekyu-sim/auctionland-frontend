@@ -31,8 +31,9 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd /usr/share/nginx/html/ui
+          cd /
           git pull
           npm install
           npm run start:build
+        #cd /... -> github 경로
         port: 22
