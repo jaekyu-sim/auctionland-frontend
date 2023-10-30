@@ -1,7 +1,7 @@
 //get, post api 구현
 import axios from "axios";
 
-//code api
+//code api 추가
 const baseURL = process.env.API_SERVER;
 const config = {
     baseURL: baseURL,
