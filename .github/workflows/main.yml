@@ -31,9 +31,9 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd /jaekyu-sim/auctionland-frontend/
+          cd /usr/share/nginx/html/ui
           git pull
           npm install
           npm run start:build
-        #cd /... -> github 경로
+        #cd /... -> 
         port: 22
