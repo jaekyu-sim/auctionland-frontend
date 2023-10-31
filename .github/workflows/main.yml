@@ -31,7 +31,7 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd /
+          cd /path/to/auctionland-frontend
           git pull
           npm install
           npm run start:build
